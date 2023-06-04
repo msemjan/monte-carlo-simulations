@@ -11,7 +11,7 @@ The simulations are:
 - **Metropolis algorithm - GPU**:
   - [MC_MA_IAKL](./MC_MA_IAKL/README.md) - $S=1/2$ Ising antiferromagnet on kagome lattice
   - [MC_MA_SIAKL](./MC_MA_SIAKL/README.md) - $S=1/2$ Stacked Ising antiferromagnet on kagome lattice
-  - [MC_MA_SIAKL_GEN_S](./MC_MA_SIAKL_GEN_S/README.md) - General spin-$S$ Stacked Ising antiferromagnet on kagome lattice (Work in progress)
+  - [MC_MA_SIAKL_GEN_S](./MC_MA_SIAKL_GEN_S/README.md) - Stacked Ising antiferromagnet on kagome lattice with a general spin $S$ (Work in progress)
   - [MC_MA_SIAKL_INFTY](./MC_MA_SIAKL_INFTY/README.md) - $S=\infty$ Stacked Ising antiferromagnet on kagome lattice
 - **Wang-Landau & Metropolis - CPU**:
   - [WL_IAKL](./WL_IAKL/README.md) - $S=1/2$ Ising antiferromagnet on kagome lattice (2D)
