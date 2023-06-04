@@ -6,6 +6,8 @@ N       = 5                                      # Number of copies
 Ls      = [8, 16, 32, 64]                        # Simulated lattice sizes
 Deltas  = [0.0, 0.1, 0.25, 0.5, 0.75, 0.9, 1.0]  # Simulated values of Delta
 DRY_RUN = False                                  # Set to true to output commands to run without running them
+tSweeps = str(1 << 20)                           # Number of sweeps for thermalization (discarded)
+sweeps  = str(1 << 20)                           # Number of sweeps for saving
 
 # Flags, folders, etc.
 OUTPUT_BINARY           = 'bin/metropolis'
@@ -32,8 +34,8 @@ for DELTA in Deltas:
                 'J1': f'(-{DELTA})',
                 'J2': f'(1-{DELTA})',
                 'L': str(L),
-                'NUM_THERM_SWEEPS': str(1 << 20),
-                'NUM_SWEEPS': str(1 << 20),
+                    'NUM_THERM_SWEEPS': tSweeps,
+                    'NUM_SWEEPS': sweeps,
                 'NUM_TEMP': 40, 
                 'MIN_TEMP': 0.15, 
                 'MAX_TEMP': 0.25,

@@ -1,13 +1,12 @@
-# Metropolis algorithm in CUDA GPGPU framework 
+# Metropolis algorithm in CUDA GPGPU framework (Work in progress)
 
-This is an implementation of Metropolis algorithm for stacked Ising model on kagome lattice. 
-
-![Fig. 1. Stacked kagome lattice](./kagome_layered.svg){width="40%"}
+This is an implementation of Metropolis algorithm for the stacked Ising antiferromagnet on the kagome lattice with general spin $S$. 
 
 ## Prerequisities 
- 
-- [CUDA](https://developer.nvidia.com/cuda-downloads) (obviously)
-- [CUB](https://nvlabs.github.io/cub/) library
+
+- [make](https://en.wikipedia.org/wiki/Make_(software))
+- [CUDA](https://developer.nvidia.com/cuda-downloads)
+- [CUB](https://nvlabs.github.io/cub/) library - download it, and change the path in `makefile` (in `INCLUDES` variable) 
 
 ## Features
  
@@ -16,69 +15,46 @@ This is an implementation of Metropolis algorithm for stacked Ising model on kag
 - Saves the final configuration of the lattice, if `SAVE_CONFIGURATION` macro is defined
 - Saves time series of observables, if `SAVE_TS` macro is defined
 - Random numbers are produced in batch for better performance
-- Logic of Metropolis algorithm is separated from the lattice shape (contained in kernels)
+- Logic of Metropolis algorithm is separated from the lattice shape (contained in kernels) 
 
-## Ising model
+## How to run
 
-$$
-\mathcal{H} = -J_1\sum_{k=1}^N\sum_{<i,j>}\sigma_{i,k}\sigma_{j,k}-J_2\sum_{k=1}^N\sum_{<i,j>}\sigma_{i,k}\sigma_{i,k+1}-h\sum_{i,k}\sigma_{i,k},
-$$
-where the first sum goes over interacting pairs of spins within layers (only n.n.), the second sum goes over n.n. from neighboring layers and the last sum represents magnetization. Variables $J_1$ and $J_2$ represent intralayer and interlayer coupling constants, respectively, and $h$ is external magnetic field. In the simplest version of Ising model, variables $\sigma_{i,k}=\pm 1$.
+### Using Makefile
 
-## Metropolis algorithm
+1. Install the CUB library, and update the `makefile`
+2. Modify the configuration file `includes/config.h` and save the changes
+3. Compile with `make all` command
+4. Run with `./bin/metropolis`
 
-Metropolis algorithm (MA) is a Markov chain Monte Carlo method, which is widely used in statistical physics for obtaining a sequence of random samples from a given distribution. In each Metropolis trial a new state is proposed, it's energy is calculated and then it is either accepted or rejected with probability proportional to it's Boltzmann factor. The main idea behind MA is captured by this pseudocode:
+### Using Python launcher script
 
-```ruby
-# Initialize the variable
-sum_A = 0 
+If you want to run several simulations in batch, it is preferable to use the `launcher.py` script. You need Python 3 and `chevron` package (Install with `pip install chevron`). To use the Python script:
 
-# N_trials steps are performed
-for n in 1..N_trials
-    # A new state is proposed
-    X_new = X_old + dX
-    
-    # Energy change is calculated
-    dH = H(X_new) - H(X_old)
-    
-    # Attempt to change the value
-    if dH < 0
-        X_old = X_new
-    else if rand() < exp(-beta*dH)
-        X_old = X_new
-    else
-        X_old = X_old
-    end
-    
-    # Sum is updated
-    sum_A += A(X_old)
-end
+1. Install the CUB library, Python and Chevron package
+2. Modify the save directory (`dir` string at the line 102) in the configuration file template `includes/config.mo` and save the changes
+3. Modify values of user parameters in the `launcher.py` if necessary
+4. Launch the script with `python3 launcher.py`
 
-# Final thermal average is calculated
-avg_A = sum_A / N_trials
-```
+## Loading data
 
-where $\beta = 1/(k_BT)$ is the inverse temperature, $k_B$ is Boltzmann constant and $T$ is the thermodynamic temperature.
+There are scripts for loading data in `scripts` directory. 
+- `loader.m` for loading time series and calculating thermal averages
+- `load_lattice.m` for loading a snapshots
+- `sum_layers.m` for drawing snapshots
 
-Each Monte Carlo trial consists of an attempt to flip one spin from $\sigma_{i,k}$ to $-\sigma_{i,k}$, the energy change is therefore calculated as:
-$$
-d\mathcal{H} = 2\sigma_{i,k}\left(J_1\sum_{k=1}^N\sum_{<i,j>}\sigma_{j,k}-J_2\sum_{<i,j>}(\sigma_{i,k-1} + \sigma_{i,k+1}) -h\right)
-$$
+The code is well commented and self-explanatory. Just make sure to set user parameters correctly and when loading data with `loader.m`, specify which folders should be processed by modifying the cell array in the `working_data.m`.
 
-## Boltzmann factors
+## Limitations
 
-Since the spin variables $\sigma_{i,k}$ can take only two values $\pm 1$ and the number of n.n. is finite, we can construct a table for all possible values of $exp(-\beta d\mathcal{H})$ and store them in memory to save computational time. 
+- Currently, this implementation is not giving correct results and needs to be fixed
+- Current implementation allows to simulate only $L=8$, $16$, $32$, $48$, and $64$
+- The length of the time series is also limited
 
 ## TODO
 
-- [x] Rewrite `generate_Boltzman_factors()` for 3D lattice
-- [x] Rewrite `Lattice.h` to accomodate 6 sublattices and macros in `config.h`
-- [x] Add macro for PBC
-- [ ] Hook up PBC macro to some functionality
-- [x] Rewrite `Quantities.h` to accomodate for 6 sublattices
-- [x] Add TS for new sublattice magnetizations
-- [x] Rewrite `updateX` kernels for 3D lattice
-- [x] Add `updateX` for `X` = 4..6
-- [x] Rewrite `init_lattice()`
-- [x] Rewrite `energyCalculation` kernel
-- [x] Fix offset for RNG
+- [ ] Identify the issue with the implementation and fix the code 
+- [ ] 'Linearize' the lattice
+- [ ] Lattice can be allocated on heap
+- [ ] Rewrite update kernels, using grid-stride loops
+- [ ] Some sweeps can be skipped (not saving data) to both de-correlate data and allow for longer simulations
+- [ ] Some modification can be made to use a smaller buffer for time series data, and copy data to host on a separate stream. Goal is to do this, while kernels are running (in non-blocking fashion). Then save the data to the disk. The advantage would be that the time series doesn't have to fit into the RAM of the GPU and a longer simulation can be executed
