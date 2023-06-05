@@ -6,24 +6,25 @@ In this folder is an implementation of the Wang-Landau method and Metropolis alg
 
 ### Manual compilation
 
+Before running, modify the user defined parameters as needed (mainly the `SAVE_DIR`, `J1`, `J2`, `L`, `FLATNESS_CRITERION`, and `FINAL_F`) and save the changes.
+
 You can use `g++` or `clang++`, both should work. The simulations can be compiled with:
 ```bash
 # Wang-Landau method
-g++ wl.cpp -o wl -D FINAL_F={final value of f} -D L={lattice size} -D FLATNESS_CRITERION={flatness criterion}
-# Metropolis algorithm
-g++ metropolis.cpp -o ma -D L={lattice size}
+g++ ./src/wl_honeycomb.cpp -o wl_honeycomb.out
+
+# Run with
+./wl_honeycomb.out
 ```
 
-### Convenience script
-
-Alternatively, you can use a Python 3 script for batch processing:
+It's also possible to use the `Makefile`:
 ```bash
-# Wang-Landau method
-python3 launcher.py
-# Metropolis algorithm
-python3 launcher_ma.py
+# Compile
+make all
+
+# Run with
+./wl_honeycomb.out
 ```
-It will execute several runs of the simulation for various combinations of parameters. These can be changed by rewriting `numCopies`, `L`, `fFinal` and `flatnessCriterion` in `launcher.py` and `launcher_ma.py`. 
 
 ### Modifications of code
 

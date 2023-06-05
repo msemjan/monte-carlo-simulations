@@ -27,8 +27,9 @@
 #include "systemSpecific.h"                 // 
 #include "fileWrapper.h"
 
-#define SAVE_FREQUENCY 100000
-#define FREQ_HIST_TEST 1000
+#define SAVE_DIR "/path/to/save/dir"    // Directory to save data into
+#define SAVE_FREQUENCY 100000           // How often should data be saved
+#define FREQ_HIST_TEST 1000             // How often should the flatness of the histogram be tested
 #define J1 -1                           // Interaction coupling constant - Nearest neighbors
 #define J2 -1                           // Interaction coupling constant - Next nearest neighbors
 #define L 16                            // Linear size of the sublattice
@@ -87,7 +88,7 @@ public:
         // Writes out possible energies collected in the set and also ones
         // in the possibleEnergyValues. At the end writes, if all values are
         // in the array
-        std::string energyFileName = "/run/media/tumaak/SAMSUNG/DATA/wl_honeycomb/energie.txt";
+        std::string energyFileName = SAVE_DIR + "energie.txt";
         std::fstream eFile(energyFileName, std::ios::out);
 
         eFile << "We encountered these energies: " << std::endl;
@@ -186,7 +187,7 @@ int main() {
 
 
     // Creating folder for files
-    std::string dir = "/run/media/tumaak/SAMSUNG/DATA/wl_honeycomb/";
+    std::string dir = SAVE_DIR;
     std::string folderName = "Kagome_WL_2D_" + std::to_string(L) + "x" +
         std::to_string(L) + "_TMIN_" + std::to_string(minTemperature) +
         "_TMAX_" + std::to_string(maxTemperature) + "_dT_" +
