@@ -14,7 +14,8 @@ The simulations are:
   - [MC_MA_SIAKL_GEN_S](./MC_MA_SIAKL_GEN_S/README.md) - Stacked Ising antiferromagnet on kagome lattice with a general spin $S$ (Work in progress)
   - [MC_MA_SIAKL_INFTY](./MC_MA_SIAKL_INFTY/README.md) - $S=\infty$ Stacked Ising antiferromagnet on kagome lattice
 - **Wang-Landau & Metropolis - CPU**:
-  - [WL_IAKL](./WL_IAKL/README.md) - $S=1/2$ Ising antiferromagnet on kagome lattice (2D)
+  - [WL_IAKL](./WL_IAKL/README.md) - $S=1/2$ Ising antiferromagnet on kagome lattice
+  - [WL_IMHL](./WL_IMHL/README.md) - $S=1/2$ Ising antiferromagnet on honeycomb lattice with next nearest neighbors (Work in progress)
 - **Metropolis algorithm - CPU**:
   - [Various Matlab Implementations](./MC_Matlab_various/README.md)
 
