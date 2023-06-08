@@ -23,6 +23,10 @@ The simulations are:
 
 Part of the codebase is in Matlab and the rest in C++ CUDA. CUB library is used for reductions in CUDA code. There are also convenience scripts written in Python 3 and Matlab.
 
+## License
+
+This software is distributed under the copyleft GNU GPL v3 license. You are free to do anything you want (use, modify, distribute, sell, ...) with this code as long as you keep this license for this code and any derivative work.
+
 ## Publications
 
 The code in this repository was used to calculate data for the following papers:
